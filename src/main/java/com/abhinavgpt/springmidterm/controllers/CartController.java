@@ -43,10 +43,10 @@ public class CartController {
 //    }
 
 //     This method bellow is just another way to implement the getListCart between the given date range
-//    @GetMapping("")
-//    public List<Cart> betweenDateRange(@RequestParam("startDate") String start, @RequestParam("endDate") String end) {
-//        return cartService.inDateRange(start, end);
-//    }
+    @GetMapping("/dateRange")
+    public List<Cart> betweenDateRange(@RequestParam("from") String start, @RequestParam("to") String end) {
+        return cartService.inDateRange(start, end);
+    }
 
     @GetMapping("/user/{userId}")
     public List<Cart> getUserCart(@PathVariable("userId") Long userId) {
