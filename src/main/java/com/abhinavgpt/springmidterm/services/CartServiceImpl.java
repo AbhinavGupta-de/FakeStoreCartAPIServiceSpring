@@ -14,6 +14,14 @@ public class CartServiceImpl implements  CartService{
 
     private final String url = "https://fakestoreapi.com/carts";
     private final RestTemplate restTemplate = new RestTemplate();
+
+    private Cart mapToCart(CartRecieveDTO cartRecieveDTO) {
+
+        return new Cart(cartRecieveDTO.id(), cartRecieveDTO.userId(), cartRecieveDTO.date(), cartRecieveDTO.products());
+
+    }
+
+
     @Override
     public List<Cart> getAllProducts() {
 
@@ -21,20 +29,13 @@ public class CartServiceImpl implements  CartService{
                 url,
                 HttpMethod.GET,
                 null,
-                new ParameterizedTypeReference<List<CartRecieveDTO>>() {}).getBody();
+                new ParameterizedTypeReference<List<CartRecieveDTO>>() {
+                }).getBody();
 
         assert cartFetchDTO != null;
 
         return cartFetchDTO.stream().map(this::mapToCart).toList();
     }
-
-    private Cart mapToCart(CartRecieveDTO cartRecieveDTO) {
-
-        return new Cart(cartRecieveDTO.getId(), cartRecieveDTO.getUserId(), cartRecieveDTO.getDate(), cartRecieveDTO.getProducts());
-
-    }
-
-
 
     @Override
     public Cart getCart(long id) {
@@ -114,12 +115,12 @@ public class CartServiceImpl implements  CartService{
     @Override
     public void updateProduct(Cart cart) {
         CartRecieveDTO sendCart = mapToCardDTO(cart);
-        restTemplate.put(url + "/" + sendCart.getId(), sendCart);
+        restTemplate.put(url + "/" + sendCart.date(), sendCart);
     }
 
     private CartRecieveDTO mapToCardDTO(Cart cart) {
 
-        return new CartRecieveDTO(cart.getId(), cart.getUserId(), cart.getDate(), cart.getProducts());
+        return new CartRecieveDTO(cart.id(), cart.userId(), cart.date(), cart.products());
 
     }
 
